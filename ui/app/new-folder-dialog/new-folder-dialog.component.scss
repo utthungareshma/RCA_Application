@@ -1,0 +1,21 @@
+.new-folder-dialog {
+    max-width: 400px;
+    margin: auto;
+    padding: 20px;
+    background-color: #fff;
+    border: 1px solid #ccc;
+    border-radius: 8px;
+    box-shadow: 0 2px 10px rgba(0, 0, 0, 0.1);
+    text-align: center;
+  }
+  .new-folder-dialog h1 {
+    margin-bottom: 20px;
+  }
+  .new-folder-dialog mat-form-field {
+    width: 100%;
+    margin-bottom: 20px;
+  }
+  .new-folder-dialog button {
+    margin-right: 10px;
+  }
+  

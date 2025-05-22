@@ -1,0 +1,540 @@
+<mat-toolbar
+  style="background-color: rgb(12, 77, 162); height: 52px; color: #fff"
+  class="custom-toolbar"
+>
+  <span style="font-size: 17px; font-weight: 700; margin: 5px 0px 0px 10px"
+    >Causal Discovery</span
+  >
+</mat-toolbar>
+<mat-tab-group mat-stretch-tabs="false" mat-align-tabs="start">
+  <mat-tab label="Explainable AI">
+    <fieldset
+      style="
+        padding: 10px;
+        border: 1px solid #ddd;
+        border-radius: 5px;
+        margin-top: 20px;
+      "
+    >
+      <legend
+        style="
+          width: auto;
+          padding: 0 10px;
+          border-bottom: none;
+          font-weight: bold;
+        "
+      ></legend>
+      <form [formGroup]="myForm" style="margin-top: 20px">
+        <mat-form-field class="folder" appearance="outline">
+          <mat-label>Data Source</mat-label>
+          <mat-select
+            [(ngModel)]="selectedFolderName"
+            formControlName="folder"
+            [disabled]="disableModel"
+            [required]="false"
+            (selectionChange)="onFolderSelection()"
+          >
+            <mat-option
+              *ngFor="let folderData of folderData"
+              [value]="folderData"
+            >
+              {{ folderData }}
+            </mat-option>
+          </mat-select>
+        </mat-form-field>
+        <mat-form-field class="folder" appearance="outline">
+          <mat-label>Data Source File</mat-label>
+          <mat-select
+            [(ngModel)]="selectedFileName"
+            formControlName="files"
+            multiple
+            [required]="false"
+            (selectionChange)="getBatches(); getSelectedTarget()"
+          >
+            <mat-option *ngFor="let file of fileData" [value]="file">
+              {{ file }}
+            </mat-option>
+          </mat-select>
+        </mat-form-field>
+        <mat-form-field class="causalDropdowns" appearance="outline">
+          <mat-label>Model Type</mat-label>
+          <mat-select
+            formControlName="typ"
+            [(ngModel)]="modelType"
+            [disabled]="disableModel"
+            (selectionChange)="setTargetForModel()"
+            [required]="false"
+          >
+            <mat-option *ngFor="let modal of modals" [value]="modal.value">
+              {{ modal.viewValue }}
+            </mat-option>
+          </mat-select>
+        </mat-form-field>
+        <mat-form-field
+          appearance="outline"
+          class="causalDropdowns"
+          *ngIf="batchTargetEnable"
+        >
+          <mat-label>Batch ID</mat-label>
+          <mat-select
+            [(ngModel)]="selectedBatchIDValue"
+            formControlName="batch"
+            (ngModelChange)="getrecordsId()"
+            (selectionChange)="getrecordsId()"
+          >
+            <mat-option *ngFor="let batch of Batch" [value]="batch.name">
+              {{ batch.name }}
+            </mat-option>
+          </mat-select>
+        </mat-form-field>
+        <mat-form-field class="causalDropdowns" appearance="outline">
+          <mat-label>Record ID</mat-label>
+          <mat-select
+            formControlName="index"
+            [(ngModel)]="selectRecord"
+            (selectionChange)="
+              setselectedRecordsFields($event); getColumnValues()
+            "
+          >
+            <mat-option *ngFor="let record of recordsID" [value]="record.name">
+              {{ record.name }}
+            </mat-option>
+          </mat-select>
+        </mat-form-field>
+        <mat-form-field class="causalDropdowns" appearance="outline">
+          <mat-label>Select Target</mat-label>
+          <mat-select
+            formControlName="target"
+            [(ngModel)]="targetValue"
+            [disabled]="disableTargetField"
+            (selectionChange)="
+              setselectedTargetsFields($event);
+              getColumnValues();
+              setInputVariables($event.value)
+            "
+            [required]="false"
+          >
+            <mat-option
+              *ngFor="let target of selectedTargetData"
+              [value]="target"
+            >
+              {{ target }}
+            </mat-option>
+          </mat-select>
+        </mat-form-field>
+        <mat-form-field class="causalDropdowns" appearance="outline">
+          <mat-label>Select Input Variables</mat-label>
+          <mat-select
+            [(ngModel)]="selectedCppArrayValues"
+            formControlName="ip"
+            multiple
+            [required]="false"
+          >
+            <mat-option
+              *ngFor="let InputVariable of selectedTargetData"
+              [value]="InputVariable"
+            >
+              {{ InputVariable }}
+            </mat-option>
+          </mat-select>
+        </mat-form-field>
+        <mat-form-field class="topfeatureDropdowns" appearance="outline">
+          <mat-label>Top Features</mat-label>
+          <mat-select
+            [(ngModel)]="selectedTopFeatures"
+            formControlName="num_ft"
+            [required]="false"
+          >
+            <mat-option
+              *ngFor="let topFeature of topFeatures"
+              [value]="topFeature.value"
+            >
+              {{ topFeature.viewValue }}
+            </mat-option>
+          </mat-select>
+        </mat-form-field>
+        <button
+          mat-button
+          (click)="calculateXAI()"
+          color="primary"
+          style="margin-left: 1500px"
+          mat-stroked-button
+          [ngClass]="{ 'enabled-btn': myForm.valid }"
+        >
+          Calculate XAI
+        </button>
+        <br />
+      </form>
+    </fieldset>
+    <mat-divider></mat-divider>
+    <div
+      style="
+        display: flex;
+        justify-content: center;
+        margin-right: 126px;
+        margin-top: 5px;
+      "
+    >
+      <mat-spinner [diameter]="40" *ngIf="isLoader"></mat-spinner>
+    </div>
+    <div
+      *ngIf="scrollable"
+      style="overflow: scroll; max-height: 520px; overflow-x: hidden"
+    >
+      <h3
+        style="margin-top: 20px; margin-left: 35px"
+        *ngIf="calculateButtonEnable"
+      >
+        <b>Explainable AI</b>
+      </h3>
+      <div style="display: flex; justify-content: space-between">
+        <div style="width: 25%; margin-left: 4%">
+          <div id="regular"></div>
+        </div>
+        <div style="width: 30%; padding-right: 13%">
+          <div id="impact"></div>
+        </div>
+        <div style="width: 25%" *ngIf="calculateButtonEnable">
+          <h2
+            style="
+              margin-top: 5%;
+              font-size: 137%;
+              margin-left: 10%;
+              font-family: ui-sans-serif;
+            "
+          >
+            Feature Details
+          </h2>
+          <table
+            mat-table
+            [dataSource]="dataSource"
+            class="custom-table"
+            style="
+              text-align: center;
+              margin-top: 7%;
+              margin-left: -21%;
+              margin-bottom: 0%;
+            "
+          >
+            <ng-container matColumnDef="feature">
+              <th mat-header-cell *matHeaderCellDef>Feature</th>
+              <td
+                mat-cell
+                *matCellDef="let element"
+                [ngClass]="{
+                  'negative-impact': element.Impact < 0,
+                  'positive-impact': element.Impact >= 0
+                }"
+              >
+                {{ element.Feature }}
+              </td>
+            </ng-container>
+
+            <ng-container matColumnDef="value">
+              <th mat-header-cell *matHeaderCellDef>Value</th>
+              <td
+                mat-cell
+                *matCellDef="let element"
+                [ngClass]="{
+                  'negative-impact': element.Impact < 0,
+                  'positive-impact': element.Impact >= 0
+                }"
+              >
+                {{ element.Value }}
+              </td>
+            </ng-container>
+
+            <ng-container matColumnDef="impact">
+              <th mat-header-cell *matHeaderCellDef>Impact</th>
+              <td
+                mat-cell
+                *matCellDef="let element"
+                [ngClass]="{
+                  'negative-impact': element.Impact < 0,
+                  'positive-impact': element.Impact >= 0
+                }"
+              >
+                {{ element.Impact }}
+              </td>
+            </ng-container>
+
+            <tr mat-header-row *matHeaderRowDef="displayedColumns"></tr>
+            <tr
+              mat-row
+              *matRowDef="let row; columns: displayedColumns"
+              [ngClass]="{ 'border-row': true }"
+            ></tr>
+          </table>
+        </div>
+      </div>
+      <h3
+        style="margin-top: 20px; margin-left: 35px; margin-bottom: 45px"
+        *ngIf="calculateButtonEnable"
+      >
+        <b>What-if Prediction</b>
+      </h3>
+      <div style="margin-left: 5%" *ngFor="let result of commonFeatures">
+        <div class="example-label-container" style="height: 1px">
+          <label id="example-name-label" class="example-name-label">{{
+            result.Feature
+          }}</label>
+        </div>
+        <mat-slider
+          style="width: 68%"
+          class="example-margin"
+          [disabled]="disabled"
+          [min]="result.Min"
+          [max]="result.Max"
+          [step]="(result.Max - result.Min) / 100"
+          [discrete]="thumbLabel"
+          [showTickMarks]="showTicks"
+        >
+          <input
+            matSliderThumb
+            [(ngModel)]="result.Value"
+            (ngModelChange)="onSliderChange(result)"
+            #slider
+          />
+        </mat-slider>
+        <mat-form-field class="sliderInput">
+          <mat-label>{{ result.Feature }}</mat-label>
+          <input
+            matInput
+            type="number"
+            [(ngModel)]="result.Value"
+            (ngModelChange)="onInputChange(result)"
+          />
+        </mat-form-field>
+      </div>
+      <form [formGroup]="PredictedPenicillinConcentrationForm">
+        <mat-form-field class="whatIf" *ngIf="calculateButtonEnable">
+          <mat-label>Actual {{ predictedValue }} value </mat-label>
+          <input matInput formControlName="target1" readonly />
+        </mat-form-field>
+        <mat-form-field class="whatIf" *ngIf="calculateButtonEnable">
+          <mat-label>Predicted {{ predictedValue }} value</mat-label>
+          <input
+            matInput
+            formControlName="PredictedPenicillinConcentration"
+            readonly
+          />
+        </mat-form-field>
+      </form>
+    </div>
+  </mat-tab>
+  <mat-tab label="Causal Analysis">
+    <div class="container">
+      <form [formGroup]="causalForm" class="form-container">
+        <div style="display: flex; justify-content: space-between">
+          <div>
+            <div>
+              <mat-form-field class="causal" appearance="outline">
+                <mat-label>Data Source</mat-label>
+                <mat-select
+                  formControlName="folder"
+                  [disabled]="disableModel"
+                  [required]="false"
+                  (selectionChange)="onFolderSelectionForCausal()"
+                >
+                  <mat-option
+                    *ngFor="let folderData of folderData"
+                    [value]="folderData"
+                  >
+                    {{ folderData }}
+                  </mat-option>
+                </mat-select>
+              </mat-form-field>
+            </div>
+            <div>
+              <mat-form-field class="causal" appearance="outline">
+                <mat-label>Data Source File</mat-label>
+                <mat-select
+                  formControlName="files"
+                  multiple
+                  [required]="false"
+                  (selectionChange)="getBatchesForCausal(); getCauses($event)"
+                >
+                  <mat-option *ngFor="let file of fileData" [value]="file">
+                    {{ file }}
+                  </mat-option>
+                </mat-select>
+              </mat-form-field>
+            </div>
+            <div>
+              <mat-form-field class="causal" appearance="outline">
+                <mat-label>Batch ID</mat-label>
+                <mat-select
+                  [(ngModel)]="selectedCausalBatchIDValue"
+                  formControlName="selected_batch"
+                  [required]="false"
+                >
+                  <mat-option *ngFor="let batch of Batch" [value]="batch.name">
+                    {{ batch.name }}
+                  </mat-option>
+                </mat-select>
+              </mat-form-field>
+            </div>
+            <div>
+              <mat-form-field class="causal" appearance="outline">
+                <mat-label>Common Causes</mat-label>
+                <mat-select
+                  formControlName="common_causes"
+                  multiple
+                  (selectionChange)="setTreatement($event)"
+                  [required]="false"
+                >
+                  <mat-option
+                    *ngFor="let cause of selectedTargetData"
+                    [value]="cause"
+                  >
+                    {{ cause }}
+                  </mat-option>
+                </mat-select>
+              </mat-form-field>
+            </div>
+            <div>
+              <mat-form-field class="causal" appearance="outline">
+                <mat-label>Treatement</mat-label>
+                <mat-select
+                  [(ngModel)]="selectedTreatmentValues"
+                  formControlName="treatment_list"
+                  multiple
+                  (selectionChange)="setTarget($event)"
+                  [required]="false"
+                >
+                  <mat-option
+                    *ngFor="let treatementList of treatementLists"
+                    [value]="treatementList"
+                  >
+                    {{ treatementList }}
+                  </mat-option>
+                </mat-select>
+              </mat-form-field>
+            </div>
+            <div>
+              <mat-form-field class="causal" appearance="outline">
+                <mat-label>Target</mat-label>
+                <mat-select
+                  [(ngModel)]="selectedCausalTargetValues"
+                  formControlName="target_var"
+                  multiple
+                  (selectionChange)="setCausalTarget($event)"
+                  [required]="false"
+                >
+                  <mat-option *ngFor="let target of targetVar" [value]="target">
+                    {{ target }}
+                  </mat-option>
+                </mat-select>
+              </mat-form-field>
+            </div>
+            <div>
+              <mat-form-field class="causal" appearance="outline">
+                <mat-label>Causal Target</mat-label>
+                <mat-select
+                  [(ngModel)]="selectedCausalTarget"
+                  formControlName="causal_target"
+                  [required]="false"
+                >
+                  <mat-option
+                    *ngFor="let causalTarget of selectedTargetTreatment"
+                    [value]="causalTarget"
+                  >
+                    {{ causalTarget }}
+                  </mat-option>
+                </mat-select>
+              </mat-form-field>
+            </div>
+            <div>
+              <mat-form-field class="causal" appearance="outline">
+                <mat-label>Learning Method</mat-label>
+                <mat-select
+                  [(ngModel)]="selectedLearningMethod"
+                  formControlName="estimate_method"
+                  [required]="false"
+                >
+                  <mat-option
+                    *ngFor="let estimatedMethod of estimatedMethods"
+                    [value]="estimatedMethod.value"
+                  >
+                    {{ estimatedMethod.viewValue }}
+                  </mat-option>
+                </mat-select>
+              </mat-form-field>
+            </div>
+            <div>
+              <mat-form-field class="causal" appearance="outline">
+                <mat-label>Robustness check</mat-label>
+                <mat-select
+                  [(ngModel)]="selectedRobustnessCheck"
+                  formControlName="refute_method"
+                  [required]="false"
+                >
+                  <mat-option
+                    *ngFor="let refutes of refute"
+                    [value]="refutes.value"
+                  >
+                    {{ refutes.viewValue }}
+                  </mat-option>
+                </mat-select>
+              </mat-form-field>
+            </div>
+            <button
+              mat-stroked-button
+              color="primary"
+              [disabled]="!causalForm.valid"
+              class="run"
+              (click)="getCausal()"
+              [ngClass]="{ 'enabled-btn': causalForm.valid }"
+            >
+              Run
+            </button>
+          </div>
+          <div style="width: 61%">
+            <div
+              *ngIf="isLoading"
+              style="
+                display: flex;
+
+                margin-left: 27%;
+                align-items: center;
+                position: absolute;
+                right: 10px;
+                left: 21%;
+                top: 40%;
+              "
+            >
+              <mat-spinner [diameter]="40" *ngIf="isLoading"></mat-spinner>
+            </div>
+            <div id="plotDiv"></div>
+          </div>
+          <div style="width: 15%" *ngIf="causalPlotData">
+            <mat-form-field class="plotdata">
+              <mat-label>Robustness check</mat-label>
+              <input matInput formControlName="refute" readonly disable />
+            </mat-form-field>
+            <br />
+            <mat-form-field class="plotdata1">
+              <mat-label>Estimated Effects</mat-label>
+              <input
+                matInput
+                formControlName="estimated_effect"
+                readonly
+                disable
+              />
+            </mat-form-field>
+            <br />
+            <mat-form-field class="plotdata1">
+              <mat-label>New Effect</mat-label>
+              <input matInput formControlName="new_effect" readonly disable />
+            </mat-form-field>
+            <br />
+            <mat-form-field class="plotdata1">
+              <mat-label>P Value</mat-label>
+              <input matInput formControlName="p_value" readonly disable />
+            </mat-form-field>
+          </div>
+        </div>
+      </form>
+    </div>
+  </mat-tab>
+</mat-tab-group>

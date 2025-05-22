@@ -1,0 +1,191 @@
+<mat-toolbar style="background-color: rgb(12, 77, 162) !important;; height: 52px;color: #fff;" class="custom-toolbar">
+    <span style="font-size: 17px; font-weight: 700; margin: 5px 0px 0px 10px;">Event Analysis</span>
+</mat-toolbar>
+<mat-tab-group mat-stretch-tabs="false" mat-align-tabs="start" #tabGroup1
+    (selectedTabChange)="onTabChanged($event, tabGroup1);">
+    <mat-tab label="Deviation Analysis" style="background-color: white;">
+        <fieldset style="padding: 10px; border: 1px solid #ddd; border-radius: 5px; margin-top: 20px;">
+            <legend style="width: auto; padding: 0 10px; border-bottom: none; font-weight: bold;"></legend>
+            <form [formGroup]="myForm" style="margin-top: 20px;">
+                <mat-form-field class="m" appearance="outline">
+                    <mat-label>Data Source</mat-label>
+                    <mat-select [(ngModel)]="selectedFolderName" formControlName="folder" [disabled]="disableModel"
+                        [required]="false" (selectionChange)="onFolderSelection()">
+                        <mat-option *ngFor="let folderData of folderData" [value]="folderData">
+                            {{folderData}}
+                        </mat-option>
+                    </mat-select>
+                </mat-form-field>
+                <mat-form-field class="m" appearance="outline">
+                    <mat-label>Data Source File</mat-label>
+                    <mat-select [(ngModel)]="selectedFileName" formControlName="files"
+                        (selectionChange)="getColumnHeaders($event.value)" multiple [required]="false">
+                        <mat-option *ngFor="let file of fileData" [value]="file">
+                            {{file}}
+                        </mat-option>
+                    </mat-select>
+                </mat-form-field>
+                <mat-form-field class="m" appearance="outline">
+                    <mat-label>CQAs & KPIs</mat-label>
+                    <mat-select [(ngModel)]="selectedCQAValue" formControlName="cqa" multiple
+                        (selectionChange)="setCPP($event)" [required]="false">
+                        <mat-option *ngFor="let cqa of CQA" [value]="cqa.name">
+                            {{cqa.name}}
+                        </mat-option>
+                    </mat-select>
+                </mat-form-field>
+
+                <mat-form-field class="m" appearance="outline">
+                    <mat-label>CPP</mat-label>
+                    <mat-select [(ngModel)]="selectedCppValue" formControlName="cpp_list" multiple [required]="false">
+                        <mat-option *ngFor="let cpp of CPP" [value]="cpp.name">
+                            {{cpp.name}}
+                        </mat-option>
+                    </mat-select>
+                </mat-form-field>
+
+                <mat-form-field class="m" appearance="outline">
+                    <mat-label>Batch ID Column</mat-label>
+                    <mat-select [(ngModel)]="selectedBatchColvalue" formControlName="batch_column"
+                        (selectionChange)="getColumnValues($event.value)" [required]="false">
+                        <mat-option *ngFor="let batchIDColumn of BatchIDColumn" [value]="batchIDColumn.name">
+                            {{batchIDColumn.name}}
+                        </mat-option>
+                    </mat-select>
+                </mat-form-field>
+                <mat-form-field class="m" appearance="outline">
+                    <mat-label>Batch ID</mat-label>
+                    <mat-select [(ngModel)]="selectedBatchIDValue" formControlName="batch_id"
+                        (selectionChange)="getColumnValueBatchProduct($event.value);onBatchChange()" [required]="false">
+                        <mat-option *ngFor="let batchid of BatchID" [value]="batchid.name">
+                            {{batchid.name}}
+                        </mat-option>
+                    </mat-select>
+                </mat-form-field>
+
+                <mat-form-field class="m" appearance="outline">
+                    <mat-label>Batch Product</mat-label>
+                    <mat-select formControlName="batch_product" [(ngModel)]="selectedProductBatch"
+                        (selectionChange)="onBatchChange()" [required]="false">
+
+                        <mat-option *ngFor="let productbatch of ProductBatch" [value]="productbatch.name">
+                            {{productbatch.name}}
+                        </mat-option>
+                    </mat-select>
+                </mat-form-field>
+                <mat-form-field class="m" appearance="outline"
+                    *ngIf="!selectedFolderName || !selectedFolderName.toLowerCase().includes('bio')">
+                    <mat-label>Recipe</mat-label>
+                    <mat-select formControlName="recipe" [(ngModel)]="selectedRecipe" [required]="false">
+                        <mat-option *ngFor="let recipe of Recipe" [value]="recipe.name">
+                            {{recipe.name}}
+                        </mat-option>
+                    </mat-select>
+                </mat-form-field>
+
+                <mat-form-field class="m" appearance="outline">
+                    <mat-label>Time Column</mat-label>
+                    <mat-select formControlName="time_column" [(ngModel)]="selectedTime" [required]="false">
+                        <mat-option *ngFor="let time of Time" [value]="time.name">
+                            {{time.name}}
+                        </mat-option>
+                    </mat-select>
+                </mat-form-field>
+                <div style="float: right;">
+                <button mat-button (click)="openPopup()"  style="border-radius: 4px 0px 4px 0px;
+                padding: 21px; font-size: 16px;" mat-stroked-button
+                    [ngClass]="{'enabled-btn':myForm.valid, 'disable-btn':!myForm.valid}">CQAs & KPIs Thresholds</button>
+                <button mat-button (click)="calculateGoldenBatch()" style="margin-left: 15px;border-radius: 4px 0px 4px 0px;
+                padding: 21px;font-size: 16px;"
+                    mat-stroked-button [ngClass]="{'enabled-btn':myForm.valid,'disable-btn':!myForm.valid}">Calculate
+                    Golden Batch</button>
+                    </div>
+                <br>
+            </form>
+        </fieldset>
+        <mat-divider></mat-divider>
+        <div style="display: flex; justify-content: center;">
+            <mat-spinner [diameter]="40" *ngIf="isLoader"></mat-spinner>
+        </div>
+        <div *ngIf="showCQAandKPITable" style="overflow-y: auto; max-height: 500px;" class="custom-container">
+            <div class="plot-container">
+                <mat-divider [vertical]="true"></mat-divider>
+                <div *ngIf="ShowdeviationtoGoldenBatch =='yes'" style="margin: 13px;">
+                    <mat-label>{{DeviationforGoldenBatch}}</mat-label>
+                </div>
+              
+                <mat-card style="margin: 10px;margin-bottom: 20px;">
+                <div id="barChart"></div>
+                </mat-card>
+                
+              <mat-card style="margin: 10px;">
+                <div *ngIf="!selectedFolderName || !selectedFolderName.toLowerCase().includes('syn')"
+                    style="width: 1500px;" id="plot"></div>
+                    </mat-card>
+            </div>
+            <div class="table-container">
+                <mat-table class="custom-table" [dataSource]="response">
+                    <ng-container matColumnDef="CQAsorKPIs">
+                        <mat-header-cell *matHeaderCellDef>CQAs or KPIs</mat-header-cell>
+                        <mat-cell *matCellDef="let item">{{ item.CQAsorKPIs }}</mat-cell>
+                    </ng-container>
+
+                    <ng-container matColumnDef="LowerBound">
+                        <mat-header-cell *matHeaderCellDef>Lower Bound</mat-header-cell>
+                        <mat-cell *matCellDef="let item">{{ item.LowerBound }}</mat-cell>
+                    </ng-container>
+
+                    <ng-container matColumnDef="UpperBound">
+                        <mat-header-cell *matHeaderCellDef>Upper Bound</mat-header-cell>
+                        <mat-cell *matCellDef="let item">{{ item.UpperBound }}</mat-cell>
+                    </ng-container>
+
+                    <ng-container matColumnDef="Target">
+                        <mat-header-cell *matHeaderCellDef>Target</mat-header-cell>
+                        <mat-cell *matCellDef="let item">{{ item.Target }}</mat-cell>
+                    </ng-container>
+
+                    <mat-header-row *matHeaderRowDef="['CQAsorKPIs', 'LowerBound', 'UpperBound', 'Target']">
+                    </mat-header-row>
+                    <mat-row *matRowDef="let row; columns: ['CQAsorKPIs', 'LowerBound', 'UpperBound', 'Target']">
+                    </mat-row>
+                </mat-table>
+            </div>
+        </div>
+    </mat-tab>
+
+    <div style="margin-left: 30px;">
+        <mat-tab label="Contribution Analysis" class="tab-style">
+            <div style="margin-top: 30px; margin-left: 50px" id="plt" class="bar-graph"> </div>
+        </mat-tab>
+    </div>
+    <mat-tab label="Drill Down">
+        <div style="margin-top: 30px">
+            <mat-form-field class="example-full-width" style="margin-left: 20px" appearance="outline">
+                <mat-label>Data Source</mat-label>
+                <input matInput placeholder="" [(ngModel)]="selectedFolderName" [disabled]="true">
+            </mat-form-field>
+
+            <mat-form-field class="example-full-width" style="margin-left: 20px" appearance="outline">
+                <mat-label>Data Source File</mat-label>
+                <input matInput placeholder="" [(ngModel)]="selectedFileName" [disabled]="true">
+            </mat-form-field>
+
+            <mat-form-field class="example-full-width" style="margin-left: 20px" appearance="outline">
+                <mat-label>Batch ID Number</mat-label>
+                <input matInput placeholder="" [(ngModel)]="selectedBatchIDValue" [disabled]="true">
+            </mat-form-field>
+
+            <mat-form-field style="margin-left: 20px; background-color: white; width: 263px;" appearance="outline">
+                <mat-label>CPP</mat-label>
+                <mat-select [(ngModel)]="selectedCPP" (selectionChange)="drilldownplot($event)">
+                    <mat-option *ngFor="let cpp of selectedCppValue " [value]="cpp">
+                        {{ cpp }}
+                    </mat-option>
+                </mat-select>
+            </mat-form-field>
+            <mat-divider></mat-divider>
+            <div style="margin-top: 50px; margin-left: 20px" id="drillDownPlot1"></div>
+        </div>
+    </mat-tab>
+</mat-tab-group>

@@ -1,0 +1,52 @@
+.mat-select {
+  background-color: white;
+}
+.tab-style {
+  margin-left: 20px;
+}
+.m {
+  margin-left: 1%;
+  width: 15%;
+}
+::ng-deep .mat-form-field-type-mat-select:not(.mat-form-field-disabled) .mat-form-field-flex {
+  background-color: white !important;
+}
+::ng-deep .mat-mdc-tab-labels {
+  background-color: #f1f4f6;
+}
+.custom-container {
+  display: flex;
+}
+.table-container {
+  flex: 1;
+  margin-left: 20px;
+  margin-right: 10px;
+  margin-top: 40px;
+  border: 1px solid black; 
+  height: 40%;
+  width: 100%;
+  max-width: 800px; 
+}
+.custom-table mat-header-row,
+.custom-table mat-header-cell {
+  background-color: #d9e1f2;
+  color: black;
+}
+.custom-table mat-cell {
+  max-height: 50px;
+}
+.plot-container {
+  width: 100%; 
+  width: 1100px;
+}
+.scrollable-body {
+  overflow: auto; 
+}
+.enabled-btn{
+  background-color: #0c4da2;
+  color: #fff !important;
+}
+.disable-btn{
+  background-color: rgba(153, 156, 160, 0.2392156863);
+    color: #999CA0;
+}

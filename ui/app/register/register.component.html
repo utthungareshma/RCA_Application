@@ -1,0 +1,56 @@
+<div class="background-container">
+<mat-card>
+  <mat-card-header>
+    <div style="position: relative; left: 0%">
+      <img mat-card-image src="assets/Images/chatbot-logo.png" />
+    </div>
+  </mat-card-header>
+  <mat-card-title class="title">RCA Register</mat-card-title>
+  <mat-card-content
+    class="content"
+    style="display: flex; flex-direction: column; align-items: stretch"
+  >
+    <form [formGroup]="registerDTO.registerForm">
+      <div>
+        <mat-form-field class="form">
+          <mat-label>User Name</mat-label>
+          <input
+            matInput
+            placeholder="Username"
+            formControlName="username"
+            required
+          />
+        </mat-form-field>
+      </div>
+      <div>
+        <mat-form-field class="form">
+          <mat-label>Password</mat-label>
+          <input
+            matInput
+            placeholder="Password"
+            formControlName="password"
+            required
+          />
+          <mat-icon matSuffix>visibility</mat-icon>
+        </mat-form-field>
+      </div>
+      <div>
+        <mat-form-field class="form">
+          <mat-label>Phone Number</mat-label>
+          <input
+            matInput
+            placeholder="phoneNo"
+            formControlName="phone_number"
+          />
+        </mat-form-field>
+      </div>
+      <button
+        class="register"
+        (click)="registerUser(registerDTO.registerForm.value)"
+      >
+        Register
+      </button>
+    </form>
+  </mat-card-content>
+</mat-card>
+</div>

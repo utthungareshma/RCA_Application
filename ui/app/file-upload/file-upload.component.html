@@ -1,0 +1,29 @@
+<h2 mat-dialog-title>File Upload</h2>
+<mat-dialog-content [style]="{ width: '100%' }" (onHide)="cancel()" [contentStyle]="{
+  'overflow-y': 'auto',
+  'overflow-x': 'hidden',
+  'max-height': '80vh',
+  'min-height': '250px'
+}">
+  <input type="file" multiple (change)="onFileSelected($event)" accept=".xlsx, .csv">
+  <table class="file-upload-table">
+    <tbody>
+      <tr *ngFor="let media of uploadedMedia; let i = index">
+        <td>
+          <div class="d-flex flex-row align-items-center">
+            <div class="media-file-name">
+              <span style="word-wrap: break-word; white-space: pre-line">
+                {{ media.FileName }}
+              </span>
+            </div>
+          </div>
+        </td>
+      </tr>
+    </tbody>
+  </table>
+  <mat-progress-bar mode="determinate" [value]="uploadProgress"></mat-progress-bar>
+</mat-dialog-content>
+<mat-dialog-actions>
+  <button mat-raised-button color="grey" (click)="onUpload1()">Upload</button>
+  <button mat-button (click)="closeDialog()">Close</button>
+</mat-dialog-actions>

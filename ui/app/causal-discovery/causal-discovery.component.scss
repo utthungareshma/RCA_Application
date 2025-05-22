@@ -1,0 +1,117 @@
+mat-slider {
+  width: 900px;
+}
+.causalDropdowns {
+  margin-left: 1%;
+}
+.whatIf {
+  margin-left: 80%;
+  margin-top: 1%;
+  height: 69px;
+}
+.whatIf mat-label {
+  width: max-content;
+  height: 15px;
+}
+.whatIf input {
+  height: 70%;
+  width: 100%;
+  box-sizing: border-box;
+}
+.InputVariable {
+  margin-left: 1%;
+  height: 69px;
+}
+.sliderInput {
+  margin-left: 10%;
+  height: 69px;
+}
+::ng-deep .mat-form-field-appearance-outline .mat-form-field-flex {
+  height: 40px !important
+}
+.data {
+  margin-left: 1%;
+}
+.example-container {
+  width: 800px;
+  margin: 10px;
+  border-right: 1px solid #555;
+}
+.causal {
+  height: 69px;
+  width: 300px;
+}
+.container {
+  display: flex;
+  flex-direction: row;
+}
+.form-container {
+  padding: 1rem;
+  box-sizing: border-box;
+}
+.image-container {
+  margin-left: 5%;
+  padding: 1rem;
+  box-sizing: border-box;
+  width: 50%;
+}
+::ng-deep .mat-mdc-tab-labels {
+  background-color: #f1f4f6;
+}
+.run {
+  margin-left: 62%;
+}
+.plotdata {
+  margin-left: 4%;
+  width: 100%;
+}
+.plotdata1 {
+  margin-left: 4%;
+  width: 100%;
+  margin-top: -13%;
+}
+.negative-impact {
+  background-color: #FF664F;
+  color: #000;
+}
+.positive-impact {
+  background-color: #89E04F;
+  color: #000;
+}
+.custom-table {
+  width: 100%;
+  border: 1px solid #000;
+}
+.custom-card {
+  padding: 16px;
+  width: 100%;
+}
+.custom-table {
+  width: 100%;
+  border-collapse: collapse;
+}
+th,
+td {
+  border: 1px solid #000;
+  padding: 8px;
+  text-align: center;
+}
+.border-row {
+  border-top: 1px solid #000;
+  ;
+  border-bottom: 1px solid #000;
+}
+.sliderInput {
+  margin-left: 10%;
+  height: 69px;
+}
+.topfeatureDropdowns {
+  margin-left: 1%;
+}
+.XAI {
+  margin-left: 91%;
+  margin-top: -6%;
+}
+.folder{
+  margin-left: 1%;
+}

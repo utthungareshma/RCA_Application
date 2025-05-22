@@ -1,0 +1,56 @@
+:host {
+    // display: flex;
+    justify-content: center;
+    margin: 100px 0px;
+  }
+  .title{
+    margin: 20px 0px 20px 0px;
+    display: flex;
+    justify-content: center;
+  }
+
+  .content{
+    display: flex;
+    justify-content: start;
+  }
+  .name{
+    width: 192%;
+  }
+  .pw{
+    width: 192%;
+  }
+  .login{
+    width: 192%;
+    background-color: rgb(12, 77, 162);
+    color: white;
+    font-size: 136%;
+    padding: 10px;
+    border: none;
+  }
+
+  .logincard{
+    width: 510px;
+  }
+  
+  .register{
+    justify-content: end;
+    display: flex;
+    font-size: 16px;
+    margin: 20px;
+  }
+  
+
+  .background-container {
+    // background-image: url('assets/Images/automation.jpeg');
+    background-image: url('../../assets/Images/automation.jpeg');
+    background-size: cover;
+    background-repeat: no-repeat;
+    background-position: center;
+    height: 100vh; 
+    display: flex; 
+    align-items: center; 
+    justify-content: center; 
+  }
+  .custom-spinner .mat-spinner-circle {
+    stroke: #ff0000 !important; 
+  }

@@ -1,0 +1,138 @@
+<mat-toolbar style="background-color: rgb(12, 77, 162); height: 52px;color: #fff;" class="custom-toolbar">
+  <div style="height: auto; padding: 5px" class="custom-toolbar">
+    <span
+    class="data-vault-link"
+    [ngClass]="{ 'active': !selectedFolder }"
+      (click)="goToDataVault()">Data Vault &nbsp;</span>
+    <span *ngIf="selectedFolder" [ngClass]="{ 'active': selectedFolder }" class="folder-path"> > {{ selectedFolder }}</span>
+  </div>
+</mat-toolbar>
+<div class="table-container">
+  <div *ngIf="showFolder">
+    <button class="addFolder" mat-button (click)="openNewFolderDialog()">
+      <span>New Folder</span>
+      <mat-icon>add</mat-icon>
+    </button>
+    <button mat-button [ngClass]="{'delBtn' : !deleteButtonDisabled , 'disabled-btn':'deleteButtonDisabled'}"
+      [disabled]="deleteButtonDisabled" (click)="deleteSelectedRows()">
+      Delete
+    </button>
+    <table mat-table [dataSource]="dataSource" class="custom-table" matSort matSortActive="Name" matSortDirection="asc"
+      class="mat-elevation-z8">
+      <ng-container matColumnDef="select">
+        <th mat-header-cell *matHeaderCellDef>
+          <mat-checkbox class="custom-checkbox" [checked]="isChecked" (change)="$event ? masterToggle() : null"
+            [checked]="selection.hasValue() && isAllSelected()"
+            [indeterminate]="selection.hasValue() && !isAllSelected()">
+          </mat-checkbox>
+        </th>
+        <td mat-cell *matCellDef="let row">
+          <mat-checkbox class="custom-checkbox" (click)="$event.stopPropagation()"
+            (change)="$event ? selection.toggle(row) : null" [checked]="selection.isSelected(row)">
+          </mat-checkbox>
+        </td>
+      </ng-container>
+
+      <ng-container matColumnDef="name">
+        <th mat-header-cell *matHeaderCellDef>Name</th>
+        <td mat-cell *matCellDef="let element">
+          <a [routerLink]="['/data-vault']" (click)="getFileList(element.name)">{{ element.name }}</a>
+        </td>
+      </ng-container>
+
+      <ng-container matColumnDef="modifiedOn">
+        <th mat-header-cell *matHeaderCellDef>Modified On</th>
+        <td mat-cell *matCellDef="let element">
+          {{ element.modifiedOn }}
+        </td>
+      </ng-container>
+
+      <ng-container matColumnDef="modifiedBy">
+        <th mat-header-cell *matHeaderCellDef>Modified By</th>
+        <td mat-cell *matCellDef="let element">
+          {{ element.modifiedBy }}
+        </td>
+      </ng-container>
+
+      <ng-container matColumnDef="size">
+        <th mat-header-cell *matHeaderCellDef>Number of Files
+        </th>
+        <td mat-cell *matCellDef="let element">
+          {{ element.size }}
+        </td>
+      </ng-container>
+
+      <tr mat-header-row *matHeaderRowDef="displayedColumns"></tr>
+      <tr mat-row *matRowDef="let row; columns: displayedColumns"></tr>
+    </table>
+    <div>
+      <mat-spinner
+        [diameter]="40"
+        style="margin-left:43%; margin-top: 55px;"
+        *ngIf="loader"
+      ></mat-spinner>
+    </div>
+  </div>
+  <div *ngIf="showFiles">
+    <button class="addFolder" mat-button (click)="uploadFile()">Upload Data</button>
+    <button [ngClass]="{'delBtn' : !deleteButtonDisabled , 'disabled-btn':'deleteButtonDisabled'}" mat-button
+      class="delBtn" color="warn" [disabled]="deleteButtonDisabled" (click)="deleteSelectedFiles()">
+      Delete
+    </button>
+    <table mat-table [dataSource]="fileDataSource" class="custom-table" matSort matSortActive="Name"
+      matSortDirection="asc" class="mat-elevation-z8">
+      <ng-container matColumnDef="select">
+        <th mat-header-cell *matHeaderCellDef>
+          <mat-checkbox (change)="$event ? masterToggleFiles() : null"
+            [checked]="selection.hasValue() && isAllSelectedFiles()"
+            [indeterminate]="selection.hasValue() && !isAllSelectedFiles()">
+          </mat-checkbox>
+        </th>
+        <td mat-cell *matCellDef="let row">
+          <mat-checkbox (click)="$event.stopPropagation()" (change)="$event ? selection.toggle(row) : null"
+            [checked]="selection.isSelected(row)">
+          </mat-checkbox>
+        </td>
+      </ng-container>
+      <ng-container matColumnDef="name">
+        <th mat-header-cell *matHeaderCellDef> Name </th>
+        <td mat-cell *matCellDef="let element">
+          <a>{{ element.name }}</a>
+        </td>
+      </ng-container>
+
+      <ng-container matColumnDef="modifiedOn">
+        <th mat-header-cell *matHeaderCellDef> Modified On </th>
+        <td mat-cell *matCellDef="let element">
+          {{ element.modifiedOn }}
+        </td>
+      </ng-container>
+
+      <ng-container matColumnDef="modifiedBy">
+        <th mat-header-cell *matHeaderCellDef> Modified By </th>
+        <td mat-cell *matCellDef="let element">
+          {{ element.modifiedBy }}
+        </td>
+      </ng-container>
+
+      <ng-container matColumnDef="size">
+        <th mat-header-cell *matHeaderCellDef> File Size
+        </th>
+        <td mat-cell *matCellDef="let element">
+          {{ element.fileSize }}
+        </td>
+      </ng-container>
+
+      <tr mat-header-row *matHeaderRowDef="displayedColumns"></tr>
+      <tr mat-row *matRowDef="let row; columns: displayedColumns">
+      </tr>
+    </table>
+    <div>
+      <mat-spinner
+        [diameter]="40"
+        style="margin-left:43%; margin-top: 55px;"
+        *ngIf="loader"
+      ></mat-spinner>
+    </div>
+  </div>
+</div>

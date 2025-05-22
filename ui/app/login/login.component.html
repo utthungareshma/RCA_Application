@@ -1,0 +1,39 @@
+<div class="background-container">
+<mat-card class="logincard">
+    <mat-card-header>
+        <div style="position: relative; left:0%;">      
+            <img mat-card-image src="assets/Images/chatbot-logo.png">
+        </div>
+    </mat-card-header>
+    <mat-card-title class="title">Login</mat-card-title>
+    <mat-card-content class="content">
+        <form [formGroup]="loginDTO.loginForm" (keydown.enter)="onSubmit(loginDTO.loginForm.value)">
+            <p>
+                <mat-form-field class="name">
+                    <mat-label>User Name</mat-label>
+                    <input matInput placeholder="Username" formControlName="username" required />
+                </mat-form-field>
+            </p>
+            <p>
+                <mat-form-field class="pw">
+                    <mat-label>Password</mat-label>
+                    <input [type]="showPassword ? 'text' : 'password'" matInput placeholder="Password"
+                        formControlName="password" required />
+                    <mat-icon matSuffix (click)="togglePasswordVisibility()">visibility</mat-icon>
+                </mat-form-field>
+            </p>
+            <div *ngIf="loginDTO.errormsg" style="color: red" id="login-errormsg" id="errormsg">
+                {{loginDTO.errormsg}}
+            </div>
+            <button class="login" type="submit" (click)="onSubmit(loginDTO.loginForm.value)">
+                <div>
+               <span>Login</span> 
+               <mat-spinner style="display: inline-block;top: 4px;"
+               *ngIf="loader" diameter="20"></mat-spinner>
+            </div>
+            </button>
+        </form>
+    </mat-card-content>
+    <p class="register">Don't have an account? &nbsp;<a routerLink="/register">Register</a></p>
+</mat-card>
+</div>

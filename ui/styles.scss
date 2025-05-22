@@ -1,0 +1,21 @@
+/* You can add global styles to this file, and also import other style files */
+
+// html, body { height: 100%; }
+body { margin: 0; font-family: Roboto, "Helvetica Neue", sans-serif; }
+.mat-mdc-tab.mdc-tab--active .mdc-tab__text-label {
+     
+    color: #235D9F !important;
+}
+.mat-mdc-tab.mdc-tab--active .mdc-tab-indicator__content
+{
+border-color: #235D9F !important;
+}
+// .mdc-button__label
+// {
+//     color: #235D9F !important;
+// }
+.enabled-btn{
+    color: #235D9F !important;
+    border-radius: 4px 0px 4px 0px !important;
+    border-color: #235D9F !important;
+}

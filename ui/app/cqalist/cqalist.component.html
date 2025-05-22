@@ -1,0 +1,82 @@
+<div class="popup-heading">
+  <div class="heading-container">
+    <h2>CQAs and KPIs Conditional Filter</h2>
+  </div>
+  <button mat-icon-button color="black" (click)="closePopup()">
+    <mat-icon>close</mat-icon>
+  </button>
+</div>
+<table mat-table [dataSource]="dataSource" class="mat-elevation-z8">
+  <ng-container matColumnDef="CQAsorKPIs">
+    <th mat-header-cell *matHeaderCellDef>CQAs or KPIs</th>
+    <td mat-cell *matCellDef="let element">
+      <mat-form-field appearance="fill">
+        <input matInput [(ngModel)]="element.CQAsorKPIs" placeholder="Enter CQAs or KPIs" [matAutocomplete]="auto">
+        <mat-autocomplete #auto="matAutocomplete">
+          <mat-option *ngFor="let option of formattedOption" [value]="option.Cqa_kpi">
+            {{ option.Cqa_kpi }}
+          </mat-option>
+        </mat-autocomplete>
+      </mat-form-field>
+    </td>
+  </ng-container>
+
+  <ng-container matColumnDef="LowerBound">
+    <th mat-header-cell *matHeaderCellDef>Lower Bound</th>
+    <td mat-cell *matCellDef="let element">
+      <mat-form-field appearance="fill">
+        <input matInput [(ngModel)]="element.LowerBound" placeholder="Enter Lower Bound" [matAutocomplete]="auto">
+        <mat-autocomplete #auto="matAutocomplete">
+          <mat-option *ngFor="let option of getLowerBoundOptions(element.CQAsorKPIs)" [value]="option">
+            {{ option }}
+          </mat-option>
+        </mat-autocomplete>
+      </mat-form-field>
+    </td>
+  </ng-container>
+
+  <ng-container matColumnDef="UpperBound">
+    <th mat-header-cell *matHeaderCellDef>Upper Bound</th>
+    <td mat-cell *matCellDef="let element">
+      <mat-form-field appearance="fill">
+        <input matInput [(ngModel)]="element.UpperBound" placeholder="Enter Upper Bound" [matAutocomplete]="auto">
+        <mat-autocomplete #auto="matAutocomplete">
+          <mat-option *ngFor="let option of getUpperBoundOptions(element.CQAsorKPIs)" [value]="option">
+            {{ option }}
+          </mat-option>
+        </mat-autocomplete>
+      </mat-form-field>
+    </td>
+  </ng-container>
+
+  <ng-container matColumnDef="Target">
+    <th mat-header-cell *matHeaderCellDef>Target</th>
+    <td mat-cell *matCellDef="let element">
+      <mat-form-field appearance="fill">
+        <input matInput [(ngModel)]="element.Target" placeholder="Enter Target" [matAutocomplete]="auto">
+        <mat-autocomplete #auto="matAutocomplete">
+          <mat-option *ngFor="let option of getTargetOptions(element.CQAsorKPIs)" [value]="option">
+            {{ option }}
+          </mat-option>
+        </mat-autocomplete>
+      </mat-form-field>
+    </td>
+  </ng-container>
+  <ng-container matColumnDef="Delete">
+    <th mat-header-cell *matHeaderCellDef>Delete</th>
+    <td mat-cell *matCellDef="let element">
+      <span class="delete-button" (click)="deleteRow(element)">-</span>
+    </td>
+  </ng-container>
+  <tr mat-header-row *matHeaderRowDef="displayedColumns"></tr>
+  <tr mat-row *matRowDef="let row; columns: displayedColumns;"></tr>
+
+</table>
+<div class="button-container">
+  <button mat-icon-button color="primary" (click)="addRow()">
+    <mat-icon>add</mat-icon>
+  </button>
+  <button class="apply-button" mat-button color="primary" (click)="applyChanges()">
+    <mat-icon>check</mat-icon> Apply
+  </button>
+</div>

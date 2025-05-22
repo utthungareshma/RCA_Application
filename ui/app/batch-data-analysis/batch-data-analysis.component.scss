@@ -1,0 +1,94 @@
+.plot-chat{
+  border-right: 1px solid #747677;
+  height: 88vh;
+}
+.askBtn{
+  float: right !important;
+  margin: 10px 23px 0 20px;
+  padding: 13px 40px;
+  color: #999ca0;
+}
+.enableBtn{
+background-color: rgb(12, 77, 162);;
+color: #ffff;
+border: none;
+border-radius: 4px 0px 4px 0px;
+
+}
+.disableBtn{
+border: none !important;
+background-color: #999CA03D;
+color: #999CA0;
+border-radius: 4px 0px 4px 0px;
+}
+.history{
+  margin-top: 15%;
+  margin-left: 10px;
+}
+.question-class {
+  font-weight: bold;
+  // margin:20px;
+  margin: 0px 20px 0px 20px;
+}
+
+.answer-class {
+  background-color: #e5ecf6;
+  padding: 20px;
+  margin:20px;
+  // font-size: 14px;
+}
+.plot-class{
+  background-color: #e5ecf6;
+  padding: 20px;
+  margin:20px;
+}
+.left-div{
+overflow-y: auto; 
+&.image-displayed {
+  overflow-y: hidden; 
+}
+}
+.right-div
+{
+  overflow: hidden !important;
+  overflow-y: hidden !important;
+}
+
+.link-text{
+  color: #5487ff !important; 
+cursor: pointer; 
+}
+.mat-mdc-form-field-focus-overlay {
+  background-color: red !important;
+}
+
+.mat-mdc-form-field{
+  .mdc-text-field{
+      background-color: none !important;
+  }
+}
+.mat-mdc-form-field{
+  div{
+      background-color: none !important;
+  }
+}
+.mat-mdc-form-field
+.mdc-text-field--disabled {
+  background-color: red !important;
+}
+::ng-deep .mdc-text-field--filled:not(.mdc-text-field--disabled)
+{
+  background-color:white !important
+} 
+.chart-container{
+  margin:20px;
+}
+.dataSourceBtn{
+  padding: 9px 23px;
+  margin-top: 20px;
+  float: right;
+  margin-right: 23px;
+}
+::ng-deep .dialog-cls {
+  height: 230px !important;
+}

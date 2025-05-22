@@ -1,0 +1,61 @@
+.mat-toolbar{
+    background-color: #fff   !important;
+    border-bottom: 1px solid #dadada;
+    height: 64px;
+    img{
+        width: 200px; 
+        height: 100%;
+    }
+}
+::ng-deep .mat-mdc-icon-button .mat-mdc-button-touch-target{
+    margin-left: -2px;
+    margin-bottom: -2px;
+}
+.sidenav{
+    background-color: #d7eafa;
+
+}
+.sidenavtab:focus{
+    background-color: blue;
+}
+h2 { 
+    color: blue; 
+} 
+.text-darkgreen { 
+    color: white; 
+    font-size: medium; 
+    padding: 20px; 
+    background: blue; 
+}
+.active-link {
+    .mat-icon {color: white !important;}
+    text-decoration: none !important;
+    // background-color:#235D9F;
+    background-color:#7ea2d0;
+    color: #fff !important;     
+  }
+.list-items{
+    display:block;
+    text-decoration: none ;
+    padding: 13px ;
+  }
+.list-item{
+    a {color: black;}
+    a:visited {
+        color:#fff;}
+  }
+.mat-icon{
+    margin-bottom: -6px ;
+     color: #fff;
+}
+.list-items{
+    span {
+        margin: -3px 10px 0px 10px; padding: 4px;
+    }
+}
+.mat-sidenav-content {
+    background-color: white !important;
+    overflow: unset;
+}
+
+  

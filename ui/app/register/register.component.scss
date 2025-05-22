@@ -1,0 +1,44 @@
+:host {
+  // display: flex;
+  justify-content: center;
+  margin: 90px 0px;
+}
+.title{
+  margin: 20px 0px 20px 0px;
+  display: flex;
+  justify-content: center;
+}
+.content{
+  display: flex;
+  justify-content: start;
+}
+.register {
+width: 510px;
+// background-color: black;
+background-color: rgb(12, 77, 162);
+border: none;
+color: white;
+font-size: 16px;
+padding: 10px;
+}
+
+form {
+display: flex;
+flex-direction: column;
+align-items: stretch;
+}
+.form{
+width: 100%;
+}
+
+.background-container {
+  // background-image: url('assets/Images/automation.jpeg');
+  background-image: url('../../assets/Images/automation.jpeg');
+  background-size: cover;
+  background-repeat: no-repeat;
+  background-position: center;
+  height: 100vh; /* Set the height to fill the entire viewport */
+  display: flex; /* Optional: if you want to center the login card vertically */
+  align-items: center; /* Optional: if you want to center the login card vertically */
+  justify-content: center; /* Optional: if you want to center the login card horizontally */
+}

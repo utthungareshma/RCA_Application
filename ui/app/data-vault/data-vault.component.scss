@@ -1,0 +1,53 @@
+.table-container {
+    margin-left: 20px; 
+    margin-right: 20px;
+    margin:20px;
+    margin-top: auto;
+  }
+  .addFolder{
+    // background: #235D9F;
+    background:rgb(12, 77, 162) !important;
+    color: white;
+    margin-top: 12px;
+    margin-bottom: 13px;
+  }
+  :host ::ng-deep .mdc-checkbox .mdc-checkbox__native-control:enabled:checked~.mdc-checkbox__background {
+    border-color: #235D9F !important;
+    background-color: #235D9F !important;
+  }
+  ::ng-deep .mdc-checkbox .mdc-checkbox__native-control:enabled:indeterminate~.mdc-checkbox__background
+  {
+    border-color: #235D9F !important;
+    background-color: #235D9F !important;
+  }
+  .delBtn{
+    float: right;
+    background: rgb(12, 77, 162);
+    color: white;
+    margin-top: 11px;
+    margin-right: 21px;
+    width: 86px;
+  }
+  .disabled-btn{
+    float: right;
+    margin-top: 11px;
+    margin-right: 21px;
+    width: 86px;
+    border: 1px solid #e0d6d6;}
+    ::ng-deep .dialog-cls {
+      height: 230px !important;
+    }
+    .custom-toolbar .data-vault-link,
+.custom-toolbar .folder-path {
+  font-size: 17px;
+  font-weight: 700;
+  cursor: pointer;
+}
+
+.custom-toolbar .data-vault-link.active {
+  color: #ffff;
+}
+ 
+.custom-toolbar .folder-path.active {
+  color: #ffff;
+}

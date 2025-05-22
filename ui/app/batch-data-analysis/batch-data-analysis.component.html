@@ -1,0 +1,107 @@
+<div class="ng-container scroll">
+  <mat-toolbar
+    style="background-color: rgb(12, 77, 162); height: 50px;color: #fff;"
+    class="custom-toolbar"
+  >
+    <span style="font-size: 16px; font-weight: 700">Batch Data Analyzer</span>
+  </mat-toolbar>
+  <div
+    class="plot-chat left-div"
+    #chatContainer
+    [ngClass]="{ 'image-displayed': isImageDisplayed }"
+    style="width: 70%; float: left"
+  >
+    <div *ngIf="errorMessage" class="error-message">
+      {{ errorMessage }}
+    </div>
+    <div class="col-md-12 text-center">
+      <div *ngIf="isLastData">
+        <div style="margin-left: 43%; margin-top: 23%">
+          <img mat-card-image src="assets/Images/chatbot.png" />
+        </div>
+        <div style="margin-left: 36%; font-weight: 500; font-style: italic">
+          <p style="margin-bottom: auto">Type a question on the right</p>
+          <p style="margin-left: 10%">to get started.</p>
+        </div>
+      </div>
+
+      <div>
+        <ng-container *ngFor="let message of messages">
+          <div
+            [ngClass]="{
+              'question-class': message.type === 'question',
+              'answer-class': message.type === 'answer',
+              'plot-class': message.type === 'image'
+            }"
+          >
+            <div *ngIf="message.type === 'answer'">Best Answer</div>
+            <br />
+            <div *ngIf="message.type !== 'image'">
+              {{ message.text }}
+            </div>
+            <img
+              *ngIf="message.type === 'image'"
+              [src]="'assets/chatbot-Image/' + message.imageURL"
+              alt="Image from backend"
+              style="max-width: 100vw; width:63%;"
+            />
+          </div>
+
+          <div>
+            <mat-spinner [diameter]="40" style="margin-left: 50%;margin-top: 30px;" *ngIf="message.loader"></mat-spinner>
+          </div>
+          <div></div>
+        </ng-container>
+      </div>
+      <div
+        class="chart-container"
+        style="display: flex; flex-direction: column; height: 80vh"
+      ></div>
+    </div>
+  </div>
+  <div
+    class="right-div"
+    style="width: 29%; float: right; overflow-y: hidden !important"
+  >
+    <div cfxLayout="column">
+      <mat-form-field appearance="outline"
+        style="width: 25vw; margin-top: 6px"
+        class="example-full-width"
+      >
+        <mat-label>Write Something</mat-label>
+        <input
+          matInput
+          [disabled]="isPageDataLoading"
+          [(ngModel)]="userInput"
+        />
+      </mat-form-field>
+    </div>
+    <button
+      class="askBtn"
+      [ngClass]="{ disableBtn: !userInput, enableBtn: userInput }"
+      [disabled]="!userInput"
+      style="cursor: pointer"
+      (click)="sendMessage()"
+    >
+      Ask Analyzer
+    </button>
+    <div class="history">
+      <!-- <br> -->
+      <span style="font-size: 16px; font-weight: 500;">History</span>
+
+      <!-- <div
+        class="link-text"
+        (click)="latestSearch(ele.question_text)"
+        style="color: grey; cursor: pointer"
+        *ngFor="let ele of lastData"
+      >
+        <br />{{ ele.question_text }}
+      </div> -->
+      <div *ngFor="let message of messages">
+      <div *ngIf="message.type == 'question'"  class="link-text" style="color: grey; cursor: pointer"><br>
+        {{message.text}}
+      </div>
+      </div>
+    </div>
+  </div>
+</div>

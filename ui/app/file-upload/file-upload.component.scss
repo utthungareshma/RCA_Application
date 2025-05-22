@@ -1,0 +1,76 @@
+.file-upload-table {
+    width: 100%;
+    border-collapse: collapse;
+    margin-top: 20px;
+  }
+  .file-upload-table th,
+  .file-upload-table td {
+    padding: 10px;
+    border: 1px solid #ddd;
+    text-align: left;
+  }
+  .file-upload-table th {
+    background-color: #f2f2f2;
+  }
+  .first-progress {
+    width: 100%;
+    background-color: #ddd;
+  }
+  .second-progress {
+    height: 20px;
+    background-color: #4caf50;
+  }
+  .media-file-name {
+    max-width: 100px;
+    overflow: hidden;
+    text-overflow: ellipsis;
+  }
+  .media-upload-check {
+    color: #4caf50; 
+  }
+  .button-container {
+    display: flex;
+    justify-content: space-between;
+    margin-bottom: 10px;
+  }  
+  .mat-dialog-container {
+    padding: 16px;
+  }
+  h2 {
+    margin-top: 0;
+    border-bottom: 1px solid #ccc
+  }
+  mat-dialog-actions {
+    display: flex;
+    justify-content: flex-end;
+    border-top: 1px solid #ccc;
+  }
+  
+  button {
+    margin-left: 0px;
+  }
+  .cancel-btn
+  {
+    color:grey;
+    border:1px solid #8c8f92;
+  }
+  .confirm-btn{
+    background-color: #235D9F;
+    color:white
+  }
+  .success-snackbar {
+    background-color: #4caf50 !important; 
+    color: #4caf50 !important; 
+  }
+  ::ng-deep input[type="file"]::file-selector-button:hover {
+    background-color: #0056b3; 
+  }
+  ::ng-deep input[type="file"]::file-selector-button {
+    background-color: #235D9F; 
+    color: #fff; 
+    padding: 12px 14px; 
+    border-radius: 4px; 
+    cursor: pointer;
+    border: none;
+    margin-right: 50px;
+  }
